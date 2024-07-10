@@ -56,5 +56,17 @@ end
 
 # Evaluate the model on the test set
 test_probs = Flux.predict_proba(model, test_X)
+
+# Output the predicted probabilities after each move
+predicted_probs = []
+for i in 1:length(test_X)
+    probs = Flux.predict_proba(model, [test_X[i]])
+    push!(predicted_probs, probs[1,1])
+end
+
+println("Predicted probabilities after each move:")
+println(predicted_probs)
+
+# Calculate the final test accuracy
 test_accuracy = mean(Flux.onehot(argmax(test_probs, dims=2), 1:2) .== Flux.onehot(test_y, 1:2))
 println("Test Accuracy: $test_accuracy")
